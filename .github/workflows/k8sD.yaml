@@ -38,12 +38,21 @@ env:
 #  K8S_SERVICE_ACCOUNT_SECRET_DATA_PASSWORD
 
 jobs: 
+  test: 
+    runs-on: "self-hosted"
+    steps:
+        - name: Run Datree Policy Check
+          uses: datreeio/action-datree@main
+          with:
+            path: 'Manifests/'
+            cliArguments: '--schema-version 1.20.0'
+  
   deploy:
     runs-on: "self-hosted"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Deploy Dev Namespace
+      - name: Deploy Manifests
         uses: actions-hub/kubectl@master
         with:
           args: apply -f Manifests/
